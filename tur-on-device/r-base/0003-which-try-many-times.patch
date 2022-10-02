@@ -1,0 +1,31 @@
+diff -uNr a/src/library/base/R/unix/system.unix.R b/src/library/base/R/unix/system.unix.R
+--- a/src/library/base/R/unix/system.unix.R
++++ b/src/library/base/R/unix/system.unix.R
+@@ -119,9 +119,27 @@
+     }
+     for(i in seq_along(names)) {
+         if(is.na(names[i])) {res[i] <- NA; next}
++        ## In Android, `system` function can often fail with `Bad address`.
++        ## So try many times (such as 10), until sucessfully execute.
++        ans <- ""
++        if(grepl("android", R.version$os)) {
++            for (j in 1:10) {
++                tryCatch({
++                    ans <- suppressWarnings(system(paste(which, shQuote(names[i])),
++                                        intern = TRUE, ignore.stderr = TRUE))
++                }, warning = function(w){
++                    # Do Nothing
++                }, error = function(e){
++                    # Do Nothing
++                }, finally = {
++                    break
++                })
++            }
++        } else {
+         ## Quoting was added in 3.0.0
+         ans <- suppressWarnings(system(paste(which, shQuote(names[i])),
+                                        intern = TRUE, ignore.stderr = TRUE))
++        }
+         ## Solaris' which gives 'no foo in ...' message on stdout,
+         ## GNU which does it on stderr
+         if(grepl("solaris", R.version$os)) {
