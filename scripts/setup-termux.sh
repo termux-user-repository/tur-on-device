@@ -47,6 +47,7 @@ echo "# Community TUR Repo" >> /system/etc/static-dns-hosts.txt
 echo "tur.kcubeterm.com" >> /system/etc/static-dns-hosts.txt
 echo "turdl.kcubeterm.com" >> /system/etc/static-dns-hosts.txt
 echo "termux-user-repository.github.io"  >> /system/etc/static-dns-hosts.txt
+echo "mirrors.ustc.edu.cn"  >> /system/etc/static-dns-hosts.txt
 
 update-static-dns
 sed -i "s/packages.termux.dev/packages-cf.termux.dev/g" /data/data/com.termux/files/usr/etc/apt/sources.list
